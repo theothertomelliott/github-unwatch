@@ -9,7 +9,7 @@
 
 {{if .watchedByLogin}}
 	{{ range $login, $repos := .watchedByLogin }}
-	<h2>{{$login}} - {{len $repos}}</h2>
+	<h2>{{$login}} - {{len $repos}} <a href="/Application/Unsubscribe?login={{$login}}">[Unsubscribe All]</a></h2>
 		{{ range $repos }}
 		{{.FullName}}<br/>
 		{{end}}

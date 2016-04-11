@@ -35,9 +35,8 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					72: []string{ 
+					86: []string{ 
 						"me",
-						"watched",
 						"watchedByLogin",
 					},
 				},
@@ -45,6 +44,7 @@ func main() {
 			&revel.MethodType{
 				Name: "Unsubscribe",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "login", Type: reflect.TypeOf((*string)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},

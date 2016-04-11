@@ -16,9 +16,11 @@ func (_ tApplication) Index(
 }
 
 func (_ tApplication) Unsubscribe(
+		login string,
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "login", login)
 	return revel.MainRouter.Reverse("Application.Unsubscribe", args).Url
 }
 

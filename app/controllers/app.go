@@ -41,42 +41,86 @@ func GithubClientForUser(user *models.User) *github.Client {
 	return github.NewClient(tc)
 }
 
-func (c Application) Index() revel.Result {
-	u := c.GetAuthenticatedUser()
-	var me *github.User
+func getWatchedByUserAndLogin(client *github.Client, user string) (map[string][]github.Repository, error) {
+
+	var err error
 	var watched []github.Repository
 	var watchedByLogin map[string][]github.Repository = make(map[string][]github.Repository)
-	if u != nil {
 
-		client := GithubClientForUser(u)
-
-		var err error
-		me, _, err = client.Users.Get("")
-		if err != nil {
-			revel.ERROR.Println(err)
-		}
-
-		watched, err = getAllWatchedByUser(client, "")
-		if err != nil {
-			revel.ERROR.Println(err)
+	watched, err = getAllWatchedByUser(client, "")
+	if err != nil {
+		return watchedByLogin, err
+	}
+	for _, repo := range watched {
+		login := repo.Owner.Login
+		if arr, ok := watchedByLogin[*login]; ok {
+			watchedByLogin[*login] = append(arr, repo)
 		} else {
-			for _, repo := range watched {
-				login := repo.Owner.Login
-				if arr, ok := watchedByLogin[*login]; ok {
-					watchedByLogin[*login] = append(arr, repo)
-				} else {
-					watchedByLogin[*login] = []github.Repository{repo}
-				}
-			}
+			watchedByLogin[*login] = []github.Repository{repo}
 		}
-		return c.Render(me, watched, watchedByLogin)
 	}
 
-	return c.Redirect(Auth.Index)
+	return watchedByLogin, nil
 }
 
-func (c Application) Unsubscribe() revel.Result {
-	// TODO: Unsubscribe from specified repositories
+func (c Application) Index() revel.Result {
+	u := c.GetAuthenticatedUser()
+	if u == nil {
+		return c.Redirect(Auth.Index)
+	}
+
+	client := GithubClientForUser(u)
+
+	var err error
+	var me *github.User
+	me, _, err = client.Users.Get("")
+	if err != nil {
+		revel.ERROR.Println(err)
+	}
+
+	var watchedByLogin map[string][]github.Repository = make(map[string][]github.Repository)
+	watchedByLogin, err = getWatchedByUserAndLogin(client, "")
+	if err != nil {
+		revel.ERROR.Println(err)
+	}
+	return c.Render(me, watchedByLogin)
+
+}
+
+func (c Application) Unsubscribe(login string) revel.Result {
+
+	if login == "" {
+		return c.Redirect(Application.Index)
+	}
+
+	u := c.GetAuthenticatedUser()
+	if u == nil {
+		return c.Redirect(Auth.Index)
+	}
+
+	var err error
+
+	client := GithubClientForUser(u)
+
+	// TODO: Cache these lists
+	var watchedByLogin map[string][]github.Repository = make(map[string][]github.Repository)
+	watchedByLogin, err = getWatchedByUserAndLogin(client, "")
+	if err != nil {
+		revel.ERROR.Println(err)
+		return c.Redirect(Application.Index)
+	}
+
+	if repos, ok := watchedByLogin[login]; ok {
+		for _, repo := range repos {
+			_, err = client.Activity.DeleteRepositorySubscription(*repo.Owner.Login, *repo.Name)
+			if err != nil {
+				revel.ERROR.Println(err)
+			}
+		}
+	} else {
+		revel.INFO.Println("No repos found")
+	}
+
 	return c.Redirect(Application.Index)
 }
 
