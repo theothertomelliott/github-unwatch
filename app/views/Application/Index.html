@@ -1,0 +1,21 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+
+{{if .me}}
+<h3>You're {{.me.Name}} on GitHub</h3>
+
+<h1>Watched Repos</h1>
+
+{{if .watchedByLogin}}
+	{{ range $login, $repos := .watchedByLogin }}
+	<h2>{{$login}} - {{len $repos}}</h2>
+		{{ range $repos }}
+		{{.FullName}}<br/>
+		{{end}}
+	{{end}}
+{{end}}
+
+{{end}}
+
+{{template "footer.html" .}}
