@@ -7,15 +7,46 @@
 
 <h1>Watched Repos</h1>
 
-{{if .watchedByLogin}}
-	{{ range $login, $repos := .watchedByLogin }}
-	<h2>{{$login}} - {{len $repos}} <a href="/Application/Unsubscribe?login={{$login}}">[Unsubscribe All]</a></h2>
-		{{ range $repos }}
-		{{.FullName}}<br/>
-		{{end}}
-	{{end}}
-{{end}}
+<div id="app">
+	<ul class="list-group">
+		<li  class="list-group-item" v-for="org in orgs">
+			<span class="badge">{{"{{"}} org.repoCount {{"}}"}}</span>
+			<span data-toggle="collapse" data-target="#list{{"{{"}}org.login{{"}}"}}" class="accordion-toggle">
+				{{"{{"}} org.login {{"}}"}} - {{"{{"}} org.repoCount {{"}}"}}
+			</span>
+			<a href="/Application/Unsubscribe?login={{"{{"}}org.login{{"}}"}}">[Unsubscribe all]</a>
+			<ul class="list-group accordian-body collapse" id="list{{"{{"}}org.login{{"}}"}}">
+				<li class="list-group-item" v-for="repo in org.repos">
+					{{"{{"}} repo.name {{"}}"}}
+				</li>
+		</li>
+	</ul>
+</div>
 
 {{end}}
+
+<script>
+new Vue({
+	el: '#app',
+	data: {
+		orgs: [
+{{if .watchedByLogin}}
+	{{ range $login, $repos := .watchedByLogin }}
+		{
+		  login: '{{$login}}',
+		  repoCount: {{ len $repos }},
+		  repos: [
+		  	{{ range $repos }}
+		  	{ name: "{{.FullName}}" },
+		  	{{ end }}
+		  ]
+		},
+	{{end}}
+{{end}}
+		]
+	}
+});
+
+</script>
 
 {{template "footer.html" .}}
