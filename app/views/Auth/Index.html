@@ -1,6 +1,7 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
-
-<a href="{{.authUrl}}">login</a>
+<a class="btn btn-block btn-social btn-github" href="{{.authUrl}}">
+	<span class="fa fa-github"></span> Sign in with GitHub
+</a>
 
 {{template "footer.html" .}}
