@@ -12,6 +12,14 @@ type Application struct {
 	*revel.Controller
 }
 
+func init() {
+	RegisterAuth(&Application{})
+}
+
+func (c Application) GetAuthenticatedUser() *models.User {
+	return c.RenderArgs["user"].(*models.User)
+}
+
 func getAllWatchedByUser(client *github.Client, user string) ([]github.Repository, error) {
 
 	var response *github.Response = nil
@@ -122,12 +130,4 @@ func (c Application) Unsubscribe(login string) revel.Result {
 	}
 
 	return c.Redirect(Application.Index)
-}
-
-func init() {
-	RegisterAuth(&Application{})
-}
-
-func (c Application) GetAuthenticatedUser() *models.User {
-	return c.RenderArgs["user"].(*models.User)
 }

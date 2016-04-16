@@ -1,0 +1,16 @@
+<div :class="alertClass">
+
+	<div :class="timerClass" v-if="hasTimer"></div>
+
+	<span :class="titleClass" v-if="hasTitle">
+		{{title.content}}
+	</span>
+
+	<span :class="messageClass" v-if="hasMessage">
+		{{message.content}}
+	</span>
+
+	<span :class="dismissClass" v-if="isDismissable" @click.prevent="dismissAlert">
+		&times;
+	</span>
+</div>

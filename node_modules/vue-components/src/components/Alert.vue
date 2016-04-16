@@ -1,0 +1,3 @@
+<style src="./Alert/Alert.styl" lang="stylus"></style>
+<template src="./Alert/Alert.html"></template>
+<script src="./Alert/Alert.js" lang="babel"></script>

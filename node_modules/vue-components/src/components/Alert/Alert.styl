@@ -1,0 +1,99 @@
+@import "./../../assets/stylus/mixins/mixins.styl"
+@import "./../../assets/stylus/settings/variables.styl"
+
+@keyframes timer {
+  0% {
+    width: 100%
+  }
+  100% {
+    width: 0
+  }
+}
+
+.alert // alert
+  border-radius-all()
+  border: 1px solid #000
+  display: block
+  margin-top: 1rem
+  overflow: hidden
+  padding: 1rem
+  position: relative
+  &:first-child
+    margin-top: 0
+  +variant(primary) // alert--primary
+    background-color: #0af
+    border-color: #0af
+  +variant(success) // alert--success
+    background-color: #efe
+    border-color: #5c5
+  +variant(danger) // alert--danger
+    background-color: #fff0f0
+    border-color: #cc5656
+  +variant(warning) // alert--warning
+    background-color: #fffbf2
+    border-color: #cca558
+  +variant(info) // alert--info
+    background-color: #f2f9ff
+    border-color: #5a93cc
+
+  +has(title) // alert__title
+    font-weight: 600
+    +variant(primary) // alert__title--primary
+      color: #fff
+    +variant(success) // alert__title--success
+      color: #080
+    +variant(danger) // alert__title--danger
+      color: #870000
+    +variant(warning) // alert__title--warning
+      color: #cca558
+    +variant(info) // alert__title--info
+      color: #5a93cc
+
+  +has(message) // alert__message
+    +variant(primary) // alert__message--primary
+      color: #fff
+    +variant(success) // alert__message--success
+      color: #080
+    +variant(danger) // alert__message--danger
+      color: #870000
+    +variant(warning) // alert__message--warning
+      color: #cca558
+    +variant(info) // alert__message--info
+      color: #5a93cc
+
+  +has(dismiss) // alert__dismiss
+    cursor: pointer
+    font-size: 1.5rem
+    font-weight: 600
+    line-height: 2rem
+    position: absolute
+    right: 1rem
+    top: .75rem
+    +variant(primary) // alert__dismiss--primary
+      color: #fff
+    +variant(success) // alert__dismiss--success
+      color: #080
+    +variant(danger) // alert__dismiss--danger
+      color: #870000
+    +variant(warning) // alert__dismiss--warning
+      color: #cca558
+    +variant(info) // alert__dismiss--info
+      color: #5a93cc
+
+  +has(timer) // alert__timer
+    height: .25rem
+    left: 0
+    position: absolute
+    top: 0
+    width: 100%
+    animation: timer 5000ms infinite linear
+    +variant(primary) // alert__timer--primary
+      background: #0af
+    +variant(success) // alert__timer--success
+      background: #5c5
+    +variant(danger) // alert__timer--danger
+      background: #cc5656
+    +variant(warning) // alert__timer--warning
+      background: #cca558
+    +variant(info) // alert__timer--info
+      background: #5a93cc

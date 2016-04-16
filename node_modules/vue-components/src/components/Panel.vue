@@ -1,0 +1,3 @@
+<style src="./Panel/Panel.styl" lang="stylus"></style>
+<template src="./Panel/Panel.html"></template>
+<script src="./Panel/Panel.js" lang="babel"></script>

@@ -1,7 +1,6 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
 
-
 {{if .me}}
 <h3>You're {{.me.Name}} on GitHub</h3>
 
@@ -64,6 +63,17 @@
 Vue.config.delimiters = ["${", "}"]
 
 new Vue({
+	ready: function() {
+		// GET request
+		this.$http({url: '/Api/Unsubscribe', method: 'GET'}).then(function (response) {
+			// success callback
+			alert("Success: " + response);
+			console.log(response);
+		}, function (response) {
+			// error callback
+			alert("Failure:" + response);
+		});
+	},
 	el: '#app',
 	data: {
 		searchQuery: '',

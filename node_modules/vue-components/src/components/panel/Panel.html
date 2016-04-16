@@ -1,0 +1,17 @@
+<div :class="panelClass">
+
+	<div :class="headerClass" v-if="hasHeader">
+		<h4 :class="titleClass">
+			<slot name="title"></slot>
+		</h4>
+	</div>
+
+	<div :class="bodyClass" v-if="hasBody">
+		<slot name="body"></slot>
+	</div>
+
+	<div :class="footerClass" v-if="hasFooter">
+		<slot name="footer"></slot>
+	</div>
+
+</div>

@@ -1,0 +1,80 @@
+@import "./../../assets/stylus/mixins/mixins.styl"
+@import "./../../assets/stylus/settings/variables.styl"
+
+.panel // panel
+  display: block
+
+  +has(header) // panel__header
+    border-radius-top()
+    background-color: #eee
+    border: 1px solid #aaa
+    border-bottom: none
+    padding: .75rem 1rem
+    +variant(primary) // panel__header--primary
+      background-color: #0af
+      border-color: #0af
+    +variant(success) // panel__header--success
+      background-color: #efe
+      border-color: #5c5
+    +variant(danger) // panel__header--danger
+      background-color: #fff0f0
+      border-color: #cc5656
+    +variant(warning) // panel__header--warning
+      background-color: #fffbf2
+      border-color: #cca558
+    +variant(info) // panel__header--info
+      background-color: #f2f9ff
+      border-color: #5a93cc
+
+  +has(title) // panel__title
+    font-size: 1rem
+    font-weight: 400
+    margin: 0
+    padding: 0
+    +variant(primary) // panel__title--primary
+      color: #fff
+    +variant(success) // panel__title--success
+      color: #080
+    +variant(danger) // panel__title--danger
+      color: #870000
+    +variant(warning) // panel__title--warning
+      color: #cca558
+    +variant(info) // panel__title--info
+      color: #5a93cc
+
+  +has(body) // panel__body
+    border: 1px solid #aaa
+    padding: .75rem 1rem
+    +variant(primary) // panel__body--primary
+      border-color: #0af
+    +variant(success) // panel__body--success
+      border-color: #5c5
+    +variant(danger) // panel__body--danger
+      border-color: #cc5656
+    +variant(warning) // panel__body--warning
+      border-color: #cca558
+    +variant(info) // panel__body--info
+      border-color: #5a93cc
+    +variant(no-border-radius-top) // panel__body--no-border-radius-top
+      border-radius-bottom()
+    +variant(no-border-radius-bottom) // panel__body--no-border-radius-bottom
+      border-radius-top()
+    +variant(border-radius) // panel__body--border-radius
+      border-radius-all()
+
+  +has(footer) // panel__footer
+    border-radius-bottom()
+    background-color: #f2f2f2
+    border: 1px solid #aaa
+    border-top: none
+    padding: .75rem 1rem
+    +variant(primary) // panel__footer--primary
+      border-color: #0af
+    +variant(success) // panel__footer--success
+      border-color: #5c5
+    +variant(danger) // panel__footer--danger
+      border-color: #cc5656
+    +variant(warning) // panel__footer--warning
+      border-color: #cca558
+    +variant(info) // panel__footer--info
+      border-color: #5a93cc
