@@ -9,6 +9,29 @@
 
 <div id="app">
 
+	<!-- Modal -->
+	<div id="unsubModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Unsubscribing</h4>
+				</div>
+				<div class="modal-body">
+						${workingRepoPercent}% complete<br/>
+					<div class="progress">
+						<div class="progress-bar" role="progressbar" v-bind:aria-valuenow="workingRepoPercent" aria-valuemin="0" aria-valuemax="100" style="width: ${workingRepoPercent}%;">							<span class="sr-only">60% Complete</span>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="row">
 	<div class="col-lg-12">
 		<div class="input-group">
@@ -24,7 +47,7 @@
 <br/><br/>
 
 <div id="example">
-	<a href v-on:click="unsubscribe">Unsubscribe from ${filteredRepos.length} repositories</a>
+	<a href="#" v-on:click="unsubscribe">Unsubscribe from ${filteredRepos.length} repositories</a>
 </div>
 
 	<div class="row">
@@ -63,7 +86,7 @@
 Vue.config.delimiters = ["${", "}"]
 
 new Vue({
-	ready: function() {
+	notReady: function() {
 		// GET request
 		this.$http({url: '/Api/Unsubscribe', method: 'GET'}).then(function (response) {
 			// success callback
@@ -77,6 +100,9 @@ new Vue({
 	el: '#app',
 	data: {
 		searchQuery: '',
+		unsubscribing: false,
+		totalWorkingRepos: 0,
+		workingReposComplete: 0,
 		orgsByLogin: [
 {{if .watchedByLogin}}
 	{{ range $login, $repos := .watchedByLogin }}
@@ -85,7 +111,10 @@ new Vue({
 		  repoCount: {{ len $repos }},
 		  repos: [
 		  	{{ range $repos }}
-		  	{ name: "{{.FullName}}" },
+		  	{
+				name: "{{.FullName}}",
+				login: "{{$login}}"
+		       	},
 		  	{{ end }}
 		  ]
 		},
@@ -96,16 +125,36 @@ new Vue({
 {{if .watchedByLogin}}
 	{{ range $login, $repos := .watchedByLogin }}
 		  	{{ range $repos }}
-		  	{ name: "{{.FullName}}" },
+		  	{
+				name: "{{.FullName}}",
+				shortName: "{{.Name}}",
+				login: "{{$login}}"
+			},
 		  	{{ end }}
 	{{end}}
 {{end}}
 		]
 	},
-
 	methods: {
 		unsubscribe: function(event){
-			alert("Will unsubscribe");
+			$('#unsubModal').modal('show');
+			//$('#unsubModal').modal('hide');
+				this.totalWorkingRepos = this.filteredRepos.length;
+				this.workingReposComplete = 0;
+				console.log(this.filteredRepos);
+				for(repo in this.filteredRepos){
+					r = this.filteredRepos[repo]
+					console.log(r)
+					this.$http({url: '/Api/Unsubscribe?repo=' + r.shortName + "&owner=" + r.login, method: 'GET'}).then(function (response) {
+					// success callback
+					console.log(response);
+					this.workingReposComplete++;
+				}, function (response) {
+					// error callback
+					alert("Failure:" + response);
+					this.workingReposComplete++;
+				});
+			}
 		}
 	},
 
@@ -114,6 +163,9 @@ new Vue({
 			return this.repos.filter(function(repo){
 				return repo.name.indexOf(this.searchQuery) > -1;
 			}.bind(this));
+		},
+		workingRepoPercent: function(){
+			return (this.workingReposComplete / this.totalWorkingRepos) * 100;
 		}
 	}
 });
