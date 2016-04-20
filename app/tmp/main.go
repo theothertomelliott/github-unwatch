@@ -35,6 +35,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "owner", Type: reflect.TypeOf((*string)(nil)) },
 					&revel.MethodArg{Name: "repo", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "dryRun", Type: reflect.TypeOf((*bool)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
