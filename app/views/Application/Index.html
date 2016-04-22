@@ -20,7 +20,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="progress">
-						<div class="progress-bar" role="progressbar" v-bind:aria-valuenow="workingRepoPercent" aria-valuemin="0" aria-valuemax="100" style="width: ${workingRepoPercent}%;">							<span class="sr-only">${workingRepoPercent}% Complete</span>
+						<div class="progress-bar" role="progressbar" v-bind:aria-valuenow="workingRepoPercent" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width: workingRepoPercent + '%'}">							<span class="sr-only">${workingRepoPercent}% Complete</span>
 						</div>
 					</div>
 				</div>
