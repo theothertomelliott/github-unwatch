@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"strconv"
 
-	"code.google.com/p/goauth2/oauth"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/github"
+
 	"github.com/revel/revel"
 	"github.com/theothertomelliott/github-watchlists/app/models"
 )
 
-var GITHUB = &oauth.Config{
-	ClientId:     "3fc8cf5e52ff07137a40",
+var GITHUB = &oauth2.Config{
+	ClientID:     "3fc8cf5e52ff07137a40",
 	ClientSecret: "a4051132da4583860259cad737ca5666258c443a",
-	AuthURL:      "https://github.com/login/oauth/authorize",
-	TokenURL:     "https://github.com/login/oauth/access_token",
-	RedirectURL:  "http://localhost:9000/Auth/Auth",
-	Scope:        "user repo",
+	Endpoint:     github.Endpoint,
+	RedirectURL:  "http://docker.local:9000/Auth/Auth",
+	Scopes:       []string{"user", "repo"},
 }
 
 type Auth struct {
@@ -42,13 +43,12 @@ func (c Auth) Index() revel.Result {
 	}
 
 	// TODO: Make this a pure redirect, deal with rendering separately
-	authUrl := GITHUB.AuthCodeURL("foo")
+	authUrl := GITHUB.AuthCodeURL("state", oauth2.AccessTypeOffline)
 	return c.Render(authUrl)
 }
 
 func (c Auth) Auth(code string) revel.Result {
-	t := &oauth.Transport{Config: GITHUB}
-	tok, err := t.Exchange(code)
+	tok, err := GITHUB.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		revel.ERROR.Println(err)
 		return c.Redirect(Auth.Index)

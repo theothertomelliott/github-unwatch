@@ -66,7 +66,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					46: []string{ 
+					47: []string{ 
 						"authUrl",
 					},
 				},
