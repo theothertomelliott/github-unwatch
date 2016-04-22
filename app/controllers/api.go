@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/revel/revel"
+	"github.com/revel/revel/cache"
 	"github.com/theothertomelliott/github-watchlists/app/models"
 )
 
@@ -48,6 +49,8 @@ func (c Api) Unsubscribe(owner string, repo string, dryRun bool) revel.Result {
 			return c.RenderJson(ApiResult{false, err.Error(), owner, repo})
 		}
 	}
+
+	go cache.Delete("watched_" + u.AccessToken)
 
 	return c.RenderJson(NewApiResultSuccess(owner, repo))
 }

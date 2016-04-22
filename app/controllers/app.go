@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"time"
+
 	"golang.org/x/oauth2"
 
 	"github.com/google/go-github/github"
 	"github.com/revel/revel"
+	"github.com/revel/revel/cache"
 	"github.com/theothertomelliott/github-watchlists/app/models"
 )
 
@@ -49,28 +52,6 @@ func GithubClientForUser(user *models.User) *github.Client {
 	return github.NewClient(tc)
 }
 
-func getWatchedByUserAndLogin(client *github.Client, user string) (map[string][]github.Repository, error) {
-
-	var err error
-	var watched []github.Repository
-	var watchedByLogin map[string][]github.Repository = make(map[string][]github.Repository)
-
-	watched, err = getAllWatchedByUser(client, "")
-	if err != nil {
-		return watchedByLogin, err
-	}
-	for _, repo := range watched {
-		login := repo.Owner.Login
-		if arr, ok := watchedByLogin[*login]; ok {
-			watchedByLogin[*login] = append(arr, repo)
-		} else {
-			watchedByLogin[*login] = []github.Repository{repo}
-		}
-	}
-
-	return watchedByLogin, nil
-}
-
 func (c Application) Index() revel.Result {
 	u := c.GetAuthenticatedUser()
 	if u == nil {
@@ -86,48 +67,15 @@ func (c Application) Index() revel.Result {
 		revel.ERROR.Println(err)
 	}
 
-	var watchedByLogin map[string][]github.Repository = make(map[string][]github.Repository)
-	watchedByLogin, err = getWatchedByUserAndLogin(client, "")
-	if err != nil {
-		revel.ERROR.Println(err)
-	}
-	return c.Render(me, watchedByLogin)
-
-}
-
-func (c Application) Unsubscribe(login string) revel.Result {
-
-	if login == "" {
-		return c.Redirect(Application.Index)
-	}
-
-	u := c.GetAuthenticatedUser()
-	if u == nil {
-		return c.Redirect(Auth.Index)
-	}
-
-	var err error
-
-	client := GithubClientForUser(u)
-
-	// TODO: Cache these lists
-	var watchedByLogin map[string][]github.Repository = make(map[string][]github.Repository)
-	watchedByLogin, err = getWatchedByUserAndLogin(client, "")
-	if err != nil {
-		revel.ERROR.Println(err)
-		return c.Redirect(Application.Index)
-	}
-
-	if repos, ok := watchedByLogin[login]; ok {
-		for _, repo := range repos {
-			_, err = client.Activity.DeleteRepositorySubscription(*repo.Owner.Login, *repo.Name)
-			if err != nil {
-				revel.ERROR.Println(err)
-			}
+	var watched []github.Repository
+	if err = cache.Get("watched_"+u.AccessToken, &watched); err != nil {
+		watched, err = getAllWatchedByUser(client, "")
+		if err != nil {
+			revel.ERROR.Println(err)
 		}
-	} else {
-		revel.INFO.Println("No repos found")
-	}
 
-	return c.Redirect(Application.Index)
+		go cache.Set("watched_"+u.AccessToken, watched, 60*time.Minute)
+	}
+	return c.Render(me, watched)
+
 }

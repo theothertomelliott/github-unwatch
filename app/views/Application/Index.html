@@ -87,16 +87,14 @@ new Vue({
 		workingReposComplete: 0,
 		reposUnsubscribed: [],
 		repos: [
-{{if .watchedByLogin}}
-	{{ range $login, $repos := .watchedByLogin }}
-		  	{{ range $repos }}
-		  	{
-				name: "{{.FullName}}",
-				shortName: "{{.Name}}",
-				login: "{{$login}}"
-			},
-		  	{{ end }}
-	{{end}}
+{{if .watched}}
+	{{ range .watched }}
+		{
+			name: "{{.FullName}}",
+			shortName: "{{.Name}}",
+			login: "{{.Owner.Login}}"
+		},
+	{{ end }}
 {{end}}
 		]
 	},
