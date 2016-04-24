@@ -15,7 +15,7 @@ var GITHUB = &oauth2.Config{
 	ClientID:     "3fc8cf5e52ff07137a40",
 	ClientSecret: "a4051132da4583860259cad737ca5666258c443a",
 	Endpoint:     github.Endpoint,
-	RedirectURL:  "http://docker.local:9000/Auth/Auth",
+	RedirectURL:  "http://localhost:9000/Auth/Auth",
 	Scopes:       []string{"user", "repo"},
 }
 
