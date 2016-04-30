@@ -11,12 +11,17 @@ import (
 	"github.com/theothertomelliott/github-watchlists/app/models"
 )
 
-var GITHUB = &oauth2.Config{
-	ClientID:     "3fc8cf5e52ff07137a40",
-	ClientSecret: "a4051132da4583860259cad737ca5666258c443a",
-	Endpoint:     github.Endpoint,
-	RedirectURL:  "http://localhost:9000/Auth/Auth",
-	Scopes:       []string{"user", "repo"},
+func getConfig() *oauth2.Config {
+	revel.INFO.Println(revel.Config.Options(""))
+	var GITHUB = &oauth2.Config{
+		ClientID:     revel.Config.StringDefault("github.oauth.clientId", ""),
+		ClientSecret: revel.Config.StringDefault("github.oauth.clientSecret", ""),
+		Endpoint:     github.Endpoint,
+		RedirectURL:  revel.Config.StringDefault("github.oauth.redirectUrl", ""),
+		Scopes:       []string{"user", "repo"},
+	}
+	revel.INFO.Println(GITHUB)
+	return GITHUB
 }
 
 type Auth struct {
@@ -36,6 +41,8 @@ func RegisterAuth(target AuthController) {
 }
 
 func (c Auth) Index() revel.Result {
+	GITHUB := getConfig()
+
 	u := c.GetAuthenticatedUser()
 	if u != nil && u.AccessToken != "" {
 		// TODO: Do redirect based on input
@@ -48,6 +55,7 @@ func (c Auth) Index() revel.Result {
 }
 
 func (c Auth) Auth(code string) revel.Result {
+	GITHUB := getConfig()
 	tok, err := GITHUB.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		revel.ERROR.Println(err)
