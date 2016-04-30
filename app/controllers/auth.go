@@ -12,7 +12,6 @@ import (
 )
 
 func getConfig() *oauth2.Config {
-	revel.INFO.Println(revel.Config.Options(""))
 	var GITHUB = &oauth2.Config{
 		ClientID:     revel.Config.StringDefault("github.oauth.clientId", ""),
 		ClientSecret: revel.Config.StringDefault("github.oauth.clientSecret", ""),
@@ -20,7 +19,6 @@ func getConfig() *oauth2.Config {
 		RedirectURL:  revel.Config.StringDefault("github.oauth.redirectUrl", ""),
 		Scopes:       []string{"user", "repo"},
 	}
-	revel.INFO.Println(GITHUB)
 	return GITHUB
 }
 
