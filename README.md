@@ -17,12 +17,17 @@ Press "Unwatch" to remove these repositories from your watchlist. Just like that
 
 GitHub Bulk Unwatcher is built using:
 
-* The Revel Framework
-* Vue.js
-* Bootstrap
-* FontAwesome
+* [The Revel Framework](https://revel.github.io)
+* [Vue.js](https://vuejs.org)
+* [Bootstrap](http://getbootstrap.com)
+* [FontAwesome](https://fortawesome.github.io/Font-Awesome/)
 
 I can highly recommend these for your next quick web project!
+
+GitHub integration uses:
+
+* [The GitHub API](https://developer.github.com/v3/)
+* [go-github](https://github.com/google/go-github)
 
 ## Deployment
 
