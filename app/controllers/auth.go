@@ -43,13 +43,21 @@ func (c Auth) Index() revel.Result {
 
 	u := c.GetAuthenticatedUser()
 	if u != nil && u.AccessToken != "" {
-		// TODO: Do redirect based on input
 		return c.Redirect(Application.Index)
 	}
 
-	// TODO: Make this a pure redirect, deal with rendering separately
 	authUrl := GITHUB.AuthCodeURL("state", oauth2.AccessTypeOffline)
 	return c.Render(authUrl)
+}
+
+func (c Auth) Logout() revel.Result {
+	u := c.GetAuthenticatedUser()
+	if u != nil {
+		c.Session["uid"] = ""
+		c.RenderArgs["user"] = nil
+	}
+
+	return c.Redirect(Auth.Index)
 }
 
 func (c Auth) Auth(code string) revel.Result {

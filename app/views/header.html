@@ -26,7 +26,24 @@
     <body>
 	    <div class="container">
 
+		<div class="row">
+			<div class="col-md-6">
 		    <h1><i class="fa fa-eye-slash" style="color:#00750c" aria-hidden="true"></i> GitHub Bulk Unwatcher</h1>
-
-<p>Unwatch multiple repositories quickly and easily.</p>
-
+		    <p>Unwatch multiple repositories quickly and easily.</p>
+			</div>
+			<div class="col-md-6">
+				<div class="row">&nbsp;</div>
+				{{if .me}}
+					<div class="row">
+						<div class="pull-right">
+							<h4><img class="img-circle" src="{{.me.AvatarURL}}&s=40" height="20"/> {{.me.Login}}</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="pull-right">
+							<a href="/Auth/Logout">[Sign Out]</a>
+						</div>
+					</div>
+				{{end}}
+			</div>
+		</div>
