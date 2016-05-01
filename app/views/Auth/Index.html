@@ -1,7 +1,24 @@
 {{set . "title" "Home"}}
 {{template "header.html" .}}
-<a class="btn btn-block btn-social btn-github" href="{{.authUrl}}">
-	<span class="fa fa-github"></span> Sign in with GitHub
-</a>
 
+<div class="row">
+	<div class="col-lg-4 col-lg-offset-4">
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Sign in</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row"><div class="col-lg-12">
+			<p>Sign in with your GitHub account to access and manage your repo watch list</p>
+			</div></div>
+			<div class="row"><div class="col-lg-12">
+			<a class="btn btn-block btn-social btn-github" href="{{.authUrl}}">
+				<span class="fa fa-github"></span> Sign in with GitHub
+			</a>
+				</div></div>
+	</div>
+</div>
+
+	</div></div>
 {{template "footer.html" .}}

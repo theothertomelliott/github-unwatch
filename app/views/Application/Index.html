@@ -3,9 +3,6 @@
 
 {{if .me}}
 
-<h1>Watched Repos</h1>
-
-
 <div id="app">
 
 	<!-- Modal -->
@@ -31,30 +28,49 @@
 	</div>
 
 	<div class="row">
-	<div class="col-lg-12">
-		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Search for..." v-model="searchQuery">
-			<!-- For some reason this stretches it to the end -->
-			<span class="input-group-btn">
-				<button class="btn btn-default" type="button">Go!</button>
-			</span>
-		</div><!-- /input-group -->
-	</div><!-- /.col-lg-12 -->
-</div><!-- /.row -->
-
-<br/><br/>
-
-<div id="example">
-	<a href="#" v-on:click="unsubscribe">Unsubscribe from ${filteredRepos.length} repositories</a>
-</div>
+		<div class="col-lg-12">
+		<p>Use the search bar to filter the below list of your watched repositories and press "Unwatch" to remove all the displayed repos from your watch list</p>
+		</div>
+	</div>
 
 	<div class="row">
-	<ul class="list-group">
-		<li  class="list-group-item" v-for="repo in filteredRepos">
-			${ repo.name }
-		</li>
+		<div class="col-lg-12">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Search your currently watched repos..." v-model="searchQuery">
+				<!-- For some reason this stretches it to the end -->
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button">Go!</button>
+				</span>
+			</div><!-- /input-group -->
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /.row -->
 
-	</ul>
+	<div class="row">
+		&nbsp;
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+				<a href="#" class="btn btn-block btn-primary" v-on:click="unsubscribe">
+					<span class="fa fa-eye-slash"></span>
+					Unwatch ${filteredRepos.length} repositories
+				</a>
+		</div>
+	</div>
+
+	<div class="row">
+		&nbsp;
+	</div>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<ul class="list-group">
+				<li  class="list-group-item" v-for="repo in filteredRepos">
+					${ repo.name }
+				</li>
+
+			</ul>
+		</div>
 	</div>
 
 </div>
