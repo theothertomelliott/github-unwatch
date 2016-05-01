@@ -28,6 +28,21 @@ func main() {
 	revel.Init(*runMode, *importPath, *srcPath)
 	revel.INFO.Println("Running revel server")
 	
+	revel.RegisterController((*controllers.Api)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Unsubscribe",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "owner", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "repo", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "dryRun", Type: reflect.TypeOf((*bool)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
 	revel.RegisterController((*controllers.Application)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -67,21 +82,6 @@ func main() {
 				Name: "Auth",
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "code", Type: reflect.TypeOf((*string)(nil)) },
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			
-		})
-	
-	revel.RegisterController((*controllers.Api)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Unsubscribe",
-				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "owner", Type: reflect.TypeOf((*string)(nil)) },
-					&revel.MethodArg{Name: "repo", Type: reflect.TypeOf((*string)(nil)) },
-					&revel.MethodArg{Name: "dryRun", Type: reflect.TypeOf((*bool)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
